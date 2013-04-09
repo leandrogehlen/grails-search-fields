@@ -1,4 +1,4 @@
-package org.grails.plugin
+package org.grails.plugins
 
 import org.grails.plugins.Author;
 import org.grails.plugins.Blog;
