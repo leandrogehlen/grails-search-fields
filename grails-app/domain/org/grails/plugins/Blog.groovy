@@ -6,10 +6,10 @@ class Blog {
 			
 	static belongsTo = [author: Author]
 	
-	static search = [
+	static searchFields = [
 		fields: [
 			'url'					
 		],
-		joins: [[name: "author"]]
+		joins: [[name: "author", type: ""]]		
 	]
 }

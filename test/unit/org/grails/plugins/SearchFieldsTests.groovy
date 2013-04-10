@@ -1,11 +1,7 @@
 package org.grails.plugins
 
-import org.grails.plugins.Author;
-import org.grails.plugins.Blog;
-import org.grails.plugins.Book;
 import org.grails.plugins.search.SearchEngine
 import org.grails.plugins.search.util.SearchUtil
-
 
 class SearchFieldsTests {
 			

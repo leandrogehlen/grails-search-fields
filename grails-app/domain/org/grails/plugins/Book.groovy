@@ -8,7 +8,7 @@ class Book {
 
 	static belongsTo = [author: Author]
 	
-	static search = [
+	static searchFields = [
 		fields: ['title', 'ISBN', 'releaseDate', 'author_name']							
 	]	
 }

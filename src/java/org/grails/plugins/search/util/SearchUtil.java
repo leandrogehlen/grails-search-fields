@@ -14,13 +14,12 @@ import org.springframework.util.Assert;
 
 public class SearchUtil {
 	
-	private static final String PROP_SEARCH = "search";
+	private static final String PROP_SEARCH_FIELDS = "searchFields";
 	private static final String PROP_FIELDS = "fields";
 	private static final String PROP_JOINS = "joins";
-	private static final String PROP_ORDER = "order";
-	private static final String PROP_DEFAUL_FIELD = "defaulField";
-	
-	
+	private static final String PROP_DEFAULT_SORT = "defaultSort";
+	private static final String PROP_DEFAULT_FIELD = "defaultField";
+		
 	private static void assertProperty(Object prop, String propName) {		
 		Assert.isInstanceOf(Collection.class,  prop);
 		Collection<?> collection = (Collection<?>) prop;
@@ -77,14 +76,14 @@ public class SearchUtil {
 	}
 	
 	public static Configuration extractConfig(Class<?> domain) {
-		Object search = GrailsClassUtils.getStaticPropertyValue(domain, PROP_SEARCH);
+		Object search = GrailsClassUtils.getStaticPropertyValue(domain, PROP_SEARCH_FIELDS);
 		Assert.isInstanceOf(Map.class,  search);						
 			
 		Map<?,?> config = (Map<?,?>) search;		
 		Set<Field> fields = extractFields(config, domain);
 		Set<Join> joins = extractJoins(config);				
-		String order =  MapUtils.getString(config, PROP_ORDER);
-		String defaulField = MapUtils.getString(config, PROP_DEFAUL_FIELD);
+		String order =  MapUtils.getString(config, PROP_DEFAULT_SORT);
+		String defaulField = MapUtils.getString(config, PROP_DEFAULT_FIELD);
 		
 		return new Configuration(domain.getSimpleName(), fields, joins, order, defaulField);
 	}

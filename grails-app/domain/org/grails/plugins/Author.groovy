@@ -14,13 +14,13 @@ class Author {
 		
 	}
 			
-	static search = [
+	static searchFields = [
 		fields : [
 			'name', 
 			'lastName', 
 			'birthday',
 		],		
 		defaultField : 'name',
-		order : 'name'
+		defaultSort : 'name'
 	]
 }

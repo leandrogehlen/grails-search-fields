@@ -1,4 +1,3 @@
-import org.grails.plugin.Author;
 import org.grails.plugins.search.SearchEngine
 import org.grails.plugins.search.util.SearchUtil
 import org.springframework.orm.hibernate3.HibernateTemplate
