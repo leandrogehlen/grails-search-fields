@@ -11,7 +11,7 @@ class SearchFieldsGrailsPlugin {
     def author = "Leandro Guindani Gehlen"
     def authorEmail = "leandrogehlen@gmail.com"
     def description = "Auto-generate search query based on DSL in domain classes"
-    def documentation = "http://grails.org/plugin/search-fields"
+    def documentation = "https://github.com/leandrogehlen/grails-search-fields/wiki"
 	
 	def license = "APACHE"
 
