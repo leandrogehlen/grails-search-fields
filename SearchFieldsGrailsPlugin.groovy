@@ -6,6 +6,10 @@ class SearchFieldsGrailsPlugin {
 	def version = "0.1"
 	def grailsVersion = "2.0 > *"
 
+	def pluginExcludes = [
+		'grails-app/domain/**'
+	]
+
 	def title = "Grails Search Fields Plugin"
 	def author = "Leandro Guindani Gehlen"
 	def authorEmail = "leandrogehlen@gmail.com"
