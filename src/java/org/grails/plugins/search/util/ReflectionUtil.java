@@ -11,24 +11,22 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.ConstructorUtils;
 import org.springframework.util.ReflectionUtils;
 
-
 public class ReflectionUtil {
 	private static final String PREFIX_SET = "set";
 	private static final String PREFIX_GET = "get";
 
-	public static final Long ZERO_LONG = new Long(0L);	
-	public static final Integer ZERO_INTEGER = new Integer(0);	
-	public static final Short ZERO_SHORT = new Short((short)0);	
-	public static final Byte ZERO_BYTE = new Byte((byte)0);	
-	public static final Float ZERO_FLOAT = new Float(0F);	
-	public static final Double ZERO_DOUBLE = new Double(0D);	
-	public static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0D);	
-	public static final BigInteger ZERO_BIG_INTEGER = BigInteger.ZERO;	
+	public static final Long ZERO_LONG = 0L;
+	public static final Integer ZERO_INTEGER = 0;
+	public static final Short ZERO_SHORT = 0;
+	public static final Byte ZERO_BYTE = 0;
+	public static final Float ZERO_FLOAT = 0F;
+	public static final Double ZERO_DOUBLE = 0D;
+	public static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0D);
+	public static final BigInteger ZERO_BIG_INTEGER = BigInteger.ZERO;
 	public static final Character NULL_CHARACTER = new Character('\u0000');
-			
-					
+
 	public static boolean isPrimitiveType(Class<?> type) {
-		return type.isPrimitive() || 
+		return type.isPrimitive() ||
 			   Character.class.isAssignableFrom(type) ||
 			   Byte.class.isAssignableFrom(type) ||
 			   Short.class.isAssignableFrom(type) ||
@@ -38,22 +36,22 @@ public class ReflectionUtil {
 			   Double.class.isAssignableFrom(type) ||
 			   String.class.isAssignableFrom(type);
 	}
-	
+
 	public static Field findField(Class<?> clazz, String fieldPath) {
 		while (true) {
-			int i = fieldPath.indexOf('.');			
+			int i = fieldPath.indexOf('.');
 			if (i < 0)
 				return ReflectionUtils.findField(clazz, fieldPath);
-			
+
 			Field field = ReflectionUtils.findField(clazz, fieldPath.substring(0, i));
 			if (field == null)
 				return null;
-			
+
 			clazz = field.getType();
 			fieldPath = fieldPath.substring(i+1);
 		}
 	}
-		
+
 	public static Object coerce(Class<?> cls, Object val) throws ClassCastException {
 		if (cls.isInstance(val))
 			return val;
@@ -69,7 +67,7 @@ public class ReflectionUtil {
 				return new BigDecimal(((Float)val).doubleValue());
 			} else if (val instanceof BigInteger) {
 				return new BigDecimal((BigInteger)val);
-			} else if (val instanceof Number) {						
+			} else if (val instanceof Number) {
 				return new BigDecimal(((Number)val).intValue());
 			} else if (val instanceof String) {
 				return new BigDecimal((String)val);
@@ -138,10 +136,10 @@ public class ReflectionUtil {
 			}
 		} else if (BigInteger.class == cls) {
 			if (val == null) {
-				return null;						
+				return null;
 			} else if (val instanceof Number || val instanceof String) {
-				return NumberUtils.createBigInteger(val.toString());					
-			} else if (val instanceof Date) {						
+				return NumberUtils.createBigInteger(val.toString());
+			} else if (val instanceof Date) {
 				String str = String.valueOf(((Date)val).getTime());
 				return NumberUtils.createBigInteger(str);
 			}
@@ -196,7 +194,7 @@ public class ReflectionUtil {
 			if (val == null) {
 				return null;
 			} else {
-				try {									
+				try {
 					return ConstructorUtils.invokeConstructor(cls, new Object[] {val});
 				} catch (Exception ex) {
 					final ClassCastException t = new ClassCastException("Class not compatible");
@@ -206,14 +204,14 @@ public class ReflectionUtil {
 			}
 		}
 
-		throw new ClassCastException("Cast not possible"+				
+		throw new ClassCastException("Cast not possible"+
 				val != null ? val+"("+val.getClass().getName()+")" : "null");
 	}
-	
+
 	public static String toGetMethod(String field){
 		return PREFIX_GET + StringUtils.capitalize(field);
 	}
-	
+
 	public static String toSetMethod(String field){
 		return PREFIX_SET + StringUtils.capitalize(field);
 	}

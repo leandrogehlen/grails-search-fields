@@ -1,14 +1,16 @@
 package org.grails.plugins.search.util;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.util.ReflectionUtils;
 
 public class ParserUtil {
-	
+
 	public static final Character TK_COMMA = ',';
 	public static final Character TK_DOT = '.';
 	public static final Character TK_DBDOT = ':';
@@ -95,100 +97,33 @@ public class ParserUtil {
 	public static final String TK_HAVING = "having";
 	public static final String TK_INDICEES = "indices";
 	public static final String TK_LOWER = "lower";
-	
+
 	private static final Set<String> keyWords = new HashSet<String>();
-	
 	static {
-		keyWords.add(TK_BETWEEN);
-		keyWords.add(TK_CASE);
-		keyWords.add(TK_DELETE);
-		keyWords.add(TK_NEW);
-		keyWords.add(TK_END);
-		keyWords.add(TK_OBJECT);
-		keyWords.add(TK_INSERT);
-		keyWords.add(TK_DISTINCT);
-		keyWords.add(TK_WHERE);
-		keyWords.add(TK_TRAINLING);
-		keyWords.add(TK_THEN);
-		keyWords.add(TK_SELECT);
-		keyWords.add(TK_AND);
-		keyWords.add(TK_OUTHER);
-		keyWords.add(TK_NOT);
-		keyWords.add(TK_FETCH);
-		keyWords.add(TK_FROM);
-		keyWords.add(TK_NULL);
-		keyWords.add(TK_COUNT);
-		keyWords.add(TK_LIKE);
-		keyWords.add(TK_WHEN);
-		keyWords.add(TK_CLASS);
-		keyWords.add(TK_INNER);
-		keyWords.add(TK_LEADING);
-		keyWords.add(TK_WITH);
-		keyWords.add(TK_SET);
-		keyWords.add(TK_ESCAPE);
-		keyWords.add(TK_JOIN);
-		keyWords.add(TK_ELEMENTS);
-		keyWords.add(TK_OF);
-		keyWords.add(TK_IS);
-		keyWords.add(TK_MEMBER);
-		keyWords.add(TK_OR);
-		keyWords.add(TK_ANY);
-		keyWords.add(TK_FULL);
-		keyWords.add(TK_MIM);
-		keyWords.add(TK_AS);
-		keyWords.add(TK_BY);
-		keyWords.add(TK_ALL);
-		keyWords.add(TK_UNION);
-		keyWords.add(TK_ORDER);
-		keyWords.add(TK_BOTH);
-		keyWords.add(TK_SOME);
-		keyWords.add(TK_PROPERTIES);
-		keyWords.add(TK_ASCENDING);
-		keyWords.add(TK_DESCENDING);
-		keyWords.add(TK_FALSE);
-		keyWords.add(TK_EXISTS);
-		keyWords.add(TK_ASC);
-		keyWords.add(TK_LEFT);
-		keyWords.add(TK_DESC);
-		keyWords.add(TK_MAX);
-		keyWords.add(TK_EMPTY);
-		keyWords.add(TK_SUM);
-		keyWords.add(TK_ON);
-		keyWords.add(TK_INTO);
-		keyWords.add(TK_ELSE);
-		keyWords.add(TK_RIGHT);
-		keyWords.add(TK_VERSIONED);
-		keyWords.add(TK_IN);
-		keyWords.add(TK_AVG);
-		keyWords.add(TK_UPDATE);
-		keyWords.add(TK_TRUE);
-		keyWords.add(TK_GROUP);
-		keyWords.add(TK_HAVING);
-		keyWords.add(TK_INDICEES);	
-		keyWords.add(TK_LOWER);
-	}
-	
-	public static boolean isKeyWord(String token) {
-		for (String key : keyWords) {
-			if (key.equals(token))
-				return true;
+		for (Field field : ParserUtil.class.getFields()) {
+			if (field.getName().startsWith("TK_") && field.getType() == String.class) {
+				keyWords.add((String) ReflectionUtils.getField(field, null));
+			}
 		}
-		return false;
 	}
-		
-	public static boolean isWord(String token) {		
+
+	public static boolean isKeyWord(String token) {
+		return keyWords.contains(token);
+	}
+
+	public static boolean isWord(String token) {
 		return (StringUtils.isNotEmpty(token) && token.matches("\\w+"));
 	}
-	
-	public static boolean isSymbol(String token) {		
-		return (StringUtils.isNotEmpty(token) && (token.length() == 1) 
+
+	public static boolean isSymbol(String token) {
+		return (StringUtils.isNotEmpty(token) && (token.length() == 1)
 				&& !Character.isLetterOrDigit(token.charAt(0)) );
 	}
-	
-	public static List<String> getTokens(String str){								
-		ArrayList<String> result = new ArrayList<String>();		
+
+	public static List<String> getTokens(String str){
+		ArrayList<String> result = new ArrayList<String>();
 		StringBuilder token = new StringBuilder();
-		
+
 		int i = 0;
 		while (i < str.length()) {
 			Character c = str.charAt(i);
@@ -213,27 +148,27 @@ public class ParserUtil {
 				}
 				if ( !TK_UNDERSCORE.equals(c) &&  !TK_SPACE.equals(c))
 					result.add(Character.toString(c));
-			}			
+			}
 			i++;
 		}
-		
+
 		if (!StringUtils.isEmpty(token.toString()))
 			result.add(token.toString());
-		
+
 		return result;
-	}	
-	
+	}
+
 	public static List<String> getJavaTokens(String str){
 		List<String> result = new ArrayList<String>();
 
 		List<String> tokens = getTokens(str);
-		String path = "";		
+		String path = "";
 
 		for (int i = 0; i < tokens.size(); i++ ){
-			String current = tokens.get(i);			
-			String next = (i+1 < tokens.size()) ? tokens.get(i+1) : "";			
+			String current = tokens.get(i);
+			String next = (i+1 < tokens.size()) ? tokens.get(i+1) : "";
 
-			if (isWord(current) && next.equals(TK_DOT.toString())){ 
+			if (isWord(current) && next.equals(TK_DOT.toString())){
 				path = path.concat(current).concat(next);
 				i++;
 			}
@@ -244,21 +179,21 @@ public class ParserUtil {
 					result.add(path);
 					path = "";
 				}
-				result.add(current);				
-			}			
-		}		
+				result.add(current);
+			}
+		}
 		return result;
 	}
-	
+
 	public static String extractLastField(String property){
 		String[] tokens = StringUtils.split(property, TK_DOT);
-		if (tokens.length > 0)					
+		if (tokens.length > 0)
 			return tokens[tokens.length -1];
 		else
 			return property;
-	}	
-	
+	}
+
 	public static String normalize(String property) {
-		return StringUtils.replace(property, "_", ".");		
+		return StringUtils.replace(property, "_", ".");
 	}
 }
