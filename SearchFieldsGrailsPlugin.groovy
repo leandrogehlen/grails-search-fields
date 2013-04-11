@@ -5,7 +5,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate
 class SearchFieldsGrailsPlugin {
 	
     def version = "0.1"    
-    def grailsVersion = "2.2 > *"        
+    def grailsVersion = "2.0 > *"        
 
     def title = "Grails Search Fields Plugin"
     def author = "Leandro Guindani Gehlen"
