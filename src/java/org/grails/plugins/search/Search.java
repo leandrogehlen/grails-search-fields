@@ -171,6 +171,10 @@ public class Search {
 	public Search execute(String fieldName, String value) {
 		return execute(config.findField(fieldName), value);
 	}
+	
+	public Search execute(String value) {
+		return execute(config.getDefaulField(), value);
+	}
 
 	public void clear(){
 		conditions.clear();
