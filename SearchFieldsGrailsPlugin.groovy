@@ -3,7 +3,7 @@ import org.grails.plugins.search.util.SearchUtil
 
 class SearchFieldsGrailsPlugin {
 
-	def version = "0.1"
+	def version = "0.2"
 	def grailsVersion = "2.0 > *"
 
 	def pluginExcludes = [
